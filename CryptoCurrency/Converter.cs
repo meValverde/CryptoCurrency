@@ -47,11 +47,32 @@ namespace CryptoCurrency
         /// <param name="toCurrencyName">Navnet på den valuta, der konverteres til</param>
         /// <param name="amount">Beløbet angivet i valutaen angivet i fromCurrencyName</param>
         /// <returns>Værdien af beløbet i toCurrencyName</returns>
-        public double Convert(String fromCurrencyName, String toCurrencyName, double amount) 
+        public double Convert(String fromCurrencyName, String toCurrencyName, double amount)
         {
-            return 0;
+            if (string.IsNullOrWhiteSpace(fromCurrencyName) || string.IsNullOrWhiteSpace(toCurrencyName))
+            {
+                throw new ArgumentException("Invalid argument, currency can't be empty");
+            }
+
+            try
+            {
+                var fromCurrencyValue = CurrencyValues[fromCurrencyName];
+                var toCurrencyValue = CurrencyValues[toCurrencyName];
+                var exchangeRate = fromCurrencyValue / toCurrencyValue;
+                var result = exchangeRate * amount;
+                return Math.Round(result, 2);
+            }
+            catch (KeyNotFoundException e)
+            {
+                Console.WriteLine($"The key{e.GetType().Name} is invalid", e.Message);
+                throw;
+            }
+
+            catch (ArgumentException e)
+            {
+                Console.WriteLine($"The value given to the argument{e.GetType().Name} is not valid", e.Message);
+                throw;
+            }
         }
-        
-        
     }
 }
