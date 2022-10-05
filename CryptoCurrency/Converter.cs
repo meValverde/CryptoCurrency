@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CryptoCurrency
 {
     public class Converter
     {
+        internal Dictionary<string, double> CurrencyValues = new Dictionary<string, double>();
+
         /// <summary>
         /// Angiver prisen for en enhed af en kryptovaluta. Prisen angives i dollars.
         /// Hvis der tidligere er angivet en værdi for samme kryptovaluta, 
@@ -13,7 +17,25 @@ namespace CryptoCurrency
         /// <param name="price">Prisen på en enhed af valutaen målt i dollars. Prisen kan ikke være negativ</param>
         public void SetPricePerUnit(String currencyName, double price)
         {
+            if (string.IsNullOrEmpty(currencyName))
+            {
+                Console.WriteLine("Invalid Currency Name");
+            }
+            else if (price < 0)
+            {
+                Console.WriteLine("Invalid currency price");
+            }
+            
+            if (!CurrencyValues.ContainsKey(currencyName))
+            {
+                CurrencyValues.Add(currencyName, price);
+            }
 
+            else
+            {
+                CurrencyValues.Remove(currencyName);
+                CurrencyValues.Add(currencyName, price);
+            }
         }
 
         /// <summary>
@@ -29,5 +51,7 @@ namespace CryptoCurrency
         {
             return 0;
         }
+        
+        
     }
 }
